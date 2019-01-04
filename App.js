@@ -49,6 +49,10 @@ class Form extends React.Component{
     constructor(props){
         super(props);
 
+        this.state = {
+            reloaded:false
+        }
+
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -56,6 +60,10 @@ class Form extends React.Component{
         e.preventDefault();
 
         this.props.passwordadder(number,length);    // Number of passwords, length of each password.
+
+        this.setState({
+            reloaded:true   /* Re-Render the form once the passwords have been submitted. */
+        });
     }
 
     render(){
@@ -72,11 +80,6 @@ class Form extends React.Component{
 class App extends React.Component{
     constructor(props){
         super(props);
-
-        this.state = {
-            reloaded:false
-        }
-
         this.passwordadder = this.passwordadder.bind(this);
     }
 
