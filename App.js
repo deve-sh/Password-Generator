@@ -2,11 +2,9 @@
     App.js - All Things React Inside the Password Generator.
 */
 
-const projectName = <div id='header'>Password Generator</div>; /* Project Name Header */
+const projectName = <div style={{textAlign:'center'}}><div id='header'>Password Generator</div></div>; /* Project Name Header */
 
 /* Form */
-
-/* Form Elements */
 
 const Input = (props) => <input className={props.className} min={(props.type==="number")?1:""} placeholder={props.placeholder} type={props.type} required/>
 
@@ -84,8 +82,9 @@ class App extends React.Component{
     }
 
     passwordadder(number,length){
-        let pass = "",passarray=[];
+        let passarray=[];
         for(let i=0;i<number;i++){
+            let pass="";
             for(let j=0;j<length;j++){
                 let randomnum = Math.floor(Math.random()*chararr.length);
                 pass += chararr[randomnum];
@@ -101,9 +100,12 @@ class App extends React.Component{
 
     render(){
         return (<div>
+            <projectName/>
             <Form/>
             <br/>
             <div id='passwords'></div>
         </div>);
     }
 }
+
+ReactDOM.render(<App/>,document.getElementById('app'));
