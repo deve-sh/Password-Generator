@@ -36,7 +36,7 @@ const Password = (props) => {
     return (
         <div>
             <div className='left'>{props.pass}</div>
-            <div className='right'></div>
+            <div className='right'>Copy</div>
         </div>
     );
 }
@@ -57,6 +57,9 @@ class Form extends React.Component{
     handleSubmit(e){    // Function to handle all the form submission stuff.
         e.preventDefault();
 
+        let number=5;
+        let length=10;
+
         this.props.passwordadder(number,length);    // Number of passwords, length of each password.
 
         this.setState({
@@ -67,7 +70,9 @@ class Form extends React.Component{
     render(){
         return (<form id='form' onSubmit={this.handleSubmit}>
                     <Input/>
+                    <br/>
                     <Input className='passwordlength' type='number' placeholder='Password Length' min={1}/>
+                    <br/>
                     <Button/>
                 </form>);
     }
@@ -93,15 +98,17 @@ class App extends React.Component{
             passarray.push(pass);
         }
 
-        const reactarray = passarray.map((password)=><Password pass={password}/>);
+        const Reactarray = passarray.map((password) => <Password key={Math.floor(Math.random()*100)} pass={password}/> );
 
-        ReactDOM.render(reactarray,document.getElementById('passwords'));
+        let temparray = <div>{Reactarray}</div>;
+
+        ReactDOM.render(temparray,document.getElementById('passwords'));
     }
 
     render(){
         return (<div>
-            <projectName/>
-            <Form/>
+            {projectName}
+            <Form passwordadder={this.passwordadder}/>
             <br/>
             <div id='passwords'></div>
         </div>);
