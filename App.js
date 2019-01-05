@@ -1,5 +1,6 @@
 /*
     App.js - All Things React Inside the Password Generator.
+    At Max 10000 Passwords Per Turn!
 */
 
 const projectName = <div style={{textAlign:'center'}}><div id='header'>Password Generator</div></div>; /* Project Name Header */
@@ -22,7 +23,6 @@ Button.defaultProps = {
     label:"Generate"
 }
 
-
 /*
     Password Character Array
 */
@@ -41,6 +41,13 @@ const Password = (props) => {
     );
 }
 
+/*
+    Error Message Component
+*/
+
+const error = (props) => <div className='error'><div style={{textAlign:'center'}}>{props.errorLabel}</div></div>;
+const emptyerror = <span></span>;
+
 /* Form Component */
 
 class Form extends React.Component{
@@ -48,23 +55,43 @@ class Form extends React.Component{
         super(props);
 
         this.state = {
-            reloaded:false
+            reloaded:false,
+            inputVal:''
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.addError = this.addError.bind(this);
+    }
+
+    addError(errorlabel){   /* Error Message Adding Function */
+        ReactDOM.render(error({errorLabel:errorlabel}),document.getElementById('errors'));
+
+        setTimeout(() => ReactDOM.render(emptyerror,document.getElementById('errors')),5000);    // Remove the error message after 5 seconds.
     }
 
     handleSubmit(e){    // Function to handle all the form submission stuff.
         e.preventDefault();
 
-        let number=5;
-        let length=10;
+        if(e.target.getAttribute('id')==='form'){
+            let number = (parseInt(e.target.children[0].value) && parseInt(e.target.children[0].value)<=10000)?parseInt(e.target.children[0].value):'error';
+            let length = (parseInt(e.target.children[2].value) && parseInt(e.target.children[2].value)<=300)?parseInt(e.target.children[2].value):'error';
 
-        this.props.passwordadder(number,length);    // Number of passwords, length of each password.
-
-        this.setState({
-            reloaded:true   /* Re-Render the form once the passwords have been submitted. */
-        });
+            if(number==='error' || length==='error')
+            {
+                this.addError('Invalid Inputs Entered.');
+            }
+            else{   /* No error ecnountered. */
+                this.props.passwordadder(number,length);    // Number of passwords, length of each password.
+                    
+                this.setState({
+                    reloaded:true,   /* Re-Render the form once the passwords have been submitted. */
+                    inputVal:''
+                });
+            }
+        }
+        else{
+            this.addError('Invalid Form Input.');
+        }
     }
 
     render(){
@@ -86,7 +113,7 @@ class App extends React.Component{
         this.passwordadder = this.passwordadder.bind(this);
     }
 
-    passwordadder(number,length){
+    passwordadder(number=1,length=10){  /* Parametrized Function */
         let passarray=[];
         for(let i=0;i<number;i++){
             let pass="";
@@ -98,16 +125,23 @@ class App extends React.Component{
             passarray.push(pass);
         }
 
-        const Reactarray = passarray.map((password) => <Password key={Math.floor(Math.random()*100)} pass={password}/> );
+        const reactarray = passarray.map((password,n=0) => {    /* n for the key attribute of every element. */
+            n++;
+            return <Password key={n} pass={password} />;
+        } );
 
-        let temparray = <div>{Reactarray}</div>;
+        let temparray = <div>{reactarray}</div>;
 
         ReactDOM.render(temparray,document.getElementById('passwords'));
+
+        document.getElementById('form').children[0].value='';
+        document.getElementById('form').children[2].value='';
     }
 
     render(){
         return (<div>
             {projectName}
+            <div id='errors'></div>
             <Form passwordadder={this.passwordadder}/>
             <br/>
             <div id='passwords'></div>
