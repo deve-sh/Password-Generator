@@ -32,11 +32,33 @@ const chararr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'
 
 /* Password Component */
 
+
+/* Function To copy from a div. */
+
+const copyPass = (e) =>{
+    var target = e.target.parentElement.children[0];
+    var range, select;
+    if (document.createRange) {
+      range = document.createRange();
+      range.selectNode(target)
+      select = window.getSelection();
+      select.removeAllRanges();
+      select.addRange(range);
+      document.execCommand('copy');
+      select.removeAllRanges();
+    } else {
+      range = document.body.createTextRange();
+      range.moveToElementText(target);
+      range.select();
+      document.execCommand('copy');
+    }
+}
+
 const Password = (props) => {
     return (
         <div>
             <div className='left'>{props.pass}</div>
-            <div className='right'>Copy</div>
+            <div className='right' onClick={copyPass}>Copy</div>
         </div>
     );
 }
