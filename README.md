@@ -17,8 +17,9 @@ cd Password-Generator
 The Application requires a web server, either extract it to a web server directory or use Python's Inbuilt Web Server.
 
 ```git
-python -m http.server   # If you are using Python 3.
-python -m
+python -V                  # Checking the version of Python being used.
+python -m http.server      # If you are using Python 3.
+python -m SimpleHTTPServer # If Python 2
 ```
 
 ### Support and License
