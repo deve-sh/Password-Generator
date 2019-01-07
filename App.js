@@ -32,11 +32,19 @@ const chararr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'
 
 /* Password Component */
 
+const Password = (props) => {
+    return (
+        <div className='passwordcont'>
+            <div className='left'>{props.pass}</div>
+            <div className='right' onClick={copyPass} title="Copy Password"><i className="fas fa-copy"></i></div>
+        </div>
+    );
+}
 
 /* Function To copy from a div. */
 
 const copyPass = (e) =>{
-    var target = e.target.parentElement.children[0];
+    var target = e.target.parentElement.parentElement.children[0];
     var range, select;
     if (document.createRange) {
       range = document.createRange();
@@ -54,20 +62,11 @@ const copyPass = (e) =>{
     }
 }
 
-const Password = (props) => {
-    return (
-        <div>
-            <div className='left'>{props.pass}</div>
-            <div className='right' onClick={copyPass}>Copy</div>
-        </div>
-    );
-}
-
 /*
     Error Message Component
 */
 
-const error = (props) => <div className='error'><div style={{textAlign:'center'}}>{props.errorLabel}</div></div>;
+const error = (props) => <div className='error'><div style={{textAlign:'center'}} className='errormessage'>{props.errorLabel}</div></div>;
 const emptyerror = <span></span>;
 
 /* Form Component */
@@ -96,7 +95,7 @@ class Form extends React.Component{
 
         if(e.target.getAttribute('id')==='form'){
             let number = (parseInt(e.target.children[0].value) && parseInt(e.target.children[0].value)<=10000)?parseInt(e.target.children[0].value):'error';
-            let length = (parseInt(e.target.children[2].value) && parseInt(e.target.children[2].value)<=300)?parseInt(e.target.children[2].value):'error';
+            let length = (parseInt(e.target.children[3].value) && parseInt(e.target.children[3].value)<=300)?parseInt(e.target.children[3].value):'error';
 
             if(number==='error' || length==='error')
             {
@@ -117,10 +116,12 @@ class Form extends React.Component{
     }
 
     render(){
-        return (<form id='form' onSubmit={this.handleSubmit}>
+        return (<form id='form' style={{textAlign:'center'}} onSubmit={this.handleSubmit}>
                     <Input/>
                     <br/>
+                    <br/>
                     <Input className='passwordlength' type='number' placeholder='Password Length' min={1}/>
+                    <br/>
                     <br/>
                     <Button/>
                 </form>);
@@ -152,12 +153,12 @@ class App extends React.Component{
             return <Password key={n} pass={password} />;
         } );
 
-        let temparray = <div>{reactarray}</div>;
+        let temparray = <div className='container'>{reactarray}</div>;
 
         ReactDOM.render(temparray,document.getElementById('passwords'));
 
         document.getElementById('form').children[0].value='';
-        document.getElementById('form').children[2].value='';
+        document.getElementById('form').children[3].value='';
     }
 
     render(){
